@@ -1,35 +1,90 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// App.jsx
+import React, { useState, useEffect } from 'react';
+import { getContract } from './utils/contract';
+import Header from './components/Header';
+import ConnectWallet from './components/ConnectWallet';
+import TweetForm from './components/TweetForm';
+import TweetList from './components/TweetList';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [contract, setContract] = useState(null);
+  const [account, setAccount] = useState(null);
+  const [tweets, setTweets] = useState([]);
+  const [isConnecting, setIsConnecting] = useState(false);
+
+  useEffect(() => {
+    const init = async () => {
+      const twitterContract = await getContract();
+      setContract(twitterContract);
+    };
+    init();
+  }, []);
+
+  const connectWallet = async () => {
+    if (window.ethereum) {
+      setIsConnecting(true);
+      try {
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        setAccount(accounts[0]);
+        fetchTweets();
+      } catch (error) {
+        console.error("Failed to connect wallet:", error);
+      } finally {
+        setIsConnecting(false);
+      }
+    } else {
+      alert("Please install MetaMask!");
+    }
+  };
+
+  const fetchTweets = async () => {
+    if (contract && account) {
+      try {
+        const userTweets = await contract.methods.getTweets(account).call();
+        setTweets(userTweets);
+      } catch (error) {
+        console.error('Error fetching tweets:', error);
+      }
+    }
+  };
+
+  const createTweet = async (tweetContent) => {
+    if (contract && account) {
+      try {
+        await contract.methods.createTweet(tweetContent).send({ from: account });
+        fetchTweets();
+      } catch (error) {
+        console.error('Error creating tweet:', error);
+      }
+    }
+  };
+
+  const likeTweet = async (author, id) => {
+    if (contract && account) {
+      try {
+        await contract.methods.likeTweet(author, id).send({ from: account });
+        fetchTweets();
+      } catch (error) {
+        console.error('Error liking tweet:', error);
+      }
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="bg-slate-900 min-h-screen text-gray-100">
+      <Header account={account} connectWallet={connectWallet} />
+      <div className="container mx-auto p-4">
+        {!account ? (
+          <ConnectWallet connectWallet={connectWallet} isConnecting={isConnecting} />
+        ) : (
+          <>
+            <TweetForm createTweet={createTweet} />
+            <TweetList tweets={tweets} likeTweet={likeTweet} />
+          </>
+        )}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
