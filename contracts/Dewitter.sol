@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-contract Twitter {
+contract Dewitter {
 
     uint16 public MAX_TWEET_LENGTH = 320;
 

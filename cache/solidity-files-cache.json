@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "D:\\PROs\\dewitter\\contracts\\Dewitter.sol": {
-      "lastModificationDate": 1722649364521,
-      "contentHash": "20053de1251e857ca8503505e20eaf43",
+      "lastModificationDate": 1722652536212,
+      "contentHash": "8a65f092363286750d40830588aeb331",
       "sourceName": "contracts/Dewitter.sol",
       "solcConfig": {
         "version": "0.8.24",
@@ -34,7 +34,7 @@
         "^0.8.0"
       ],
       "artifacts": [
-        "Twitter"
+        "Dewitter"
       ]
     }
   }
