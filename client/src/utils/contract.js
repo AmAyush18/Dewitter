@@ -2,6 +2,7 @@ import Web3 from 'web3';
 import DewitterABI from './DewitterABI.json';
 
 const CONTRACT_ADDRESS = import.meta.env.VITE_DEPLOYED_CONTRACT_ADDRESS;
+console.log({ CONTRACT_ADDRESS });
 
 export const getContract = async () => {
   if (window.ethereum) {
