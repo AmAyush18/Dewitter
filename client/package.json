@@ -12,6 +12,7 @@
   "dependencies": {
     "@openzeppelin/contracts": "^5.0.2",
     "autoprefixer": "^10.4.20",
+    "ethereum-blockies-base64": "^1.0.2",
     "framer-motion": "^11.3.21",
     "postcss": "^8.4.40",
     "react": "^18.3.1",

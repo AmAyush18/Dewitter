@@ -1,4 +1,3 @@
-// App.jsx
 import React, { useState, useEffect } from 'react';
 import { getContract } from './utils/contract';
 import Header from './components/Header';
@@ -26,7 +25,7 @@ function App() {
       try {
         const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
         setAccount(accounts[0]);
-        fetchTweets();
+        await fetchTweets(accounts[0]);  // Fetch tweets immediately after connecting
       } catch (error) {
         console.error("Failed to connect wallet:", error);
       } finally {
@@ -37,11 +36,11 @@ function App() {
     }
   };
 
-  const fetchTweets = async () => {
-    if (contract && account) {
+  const fetchTweets = async (userAccount) => {
+    if (contract && userAccount) {
       try {
-        const userTweets = await contract.methods.getTweets(account).call();
-        setTweets(userTweets);
+        const userTweets = await contract.methods.getTweets(userAccount).call();
+        setTweets(userTweets.reverse());  // Reverse the order of tweets
       } catch (error) {
         console.error('Error fetching tweets:', error);
       }
@@ -52,7 +51,7 @@ function App() {
     if (contract && account) {
       try {
         await contract.methods.createTweet(tweetContent).send({ from: account });
-        fetchTweets();
+        await fetchTweets(account);  // Fetch tweets after creating a new one
       } catch (error) {
         console.error('Error creating tweet:', error);
       }
@@ -63,7 +62,7 @@ function App() {
     if (contract && account) {
       try {
         await contract.methods.likeTweet(author, id).send({ from: account });
-        fetchTweets();
+        await fetchTweets(account);  // Fetch tweets after liking
       } catch (error) {
         console.error('Error liking tweet:', error);
       }

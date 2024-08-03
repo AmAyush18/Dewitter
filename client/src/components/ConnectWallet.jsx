@@ -1,4 +1,3 @@
-// components/ConnectWallet.jsx
 import React from 'react';
 import { motion } from 'framer-motion';
 
@@ -11,7 +10,7 @@ function ConnectWallet({ connectWallet, isConnecting }) {
         transition={{ duration: 0.5 }}
         className="text-center"
       >
-        <h2 className="text-3xl font-bold mb-4">Welcome to Decentralized Twitter</h2>
+        <h2 className="text-3xl font-bold mb-4">Welcome to DeWitter</h2>
         <p className="mb-8 text-gray-400">Connect your wallet to start tweeting</p>
         <button
           onClick={connectWallet}

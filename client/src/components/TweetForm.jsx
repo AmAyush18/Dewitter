@@ -1,4 +1,3 @@
-// components/TweetForm.jsx
 import React, { useState } from 'react';
 
 function TweetForm({ createTweet }) {
